@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "sumarNumeros.asm"
+
+extern int sumarNumeros(int*);
+extern int exponente(int, int);
+extern int paridad(int);
 
 void funcion1() {
     getchar();
@@ -17,17 +20,33 @@ void funcion1() {
 }
 
 void funcion2() {
+    getchar();
+    int base, exp;
+    printf("Ingrese la base de la operacion: ");
+    scanf("%d", &base);
+    printf("Ingrese el exponente de la operacion: ");
+    scanf("%d", &exp);
+    int respuesta = exponente(base, exp);
+    printf("Total = %d", respuesta);
     return;
 }
 
 void funcion3() {
+    getchar();
+    int num;
+    printf("Ingrese un numero: ");
+    scanf("%d", &num);
+    int par = paridad(num);
+    if (par == 1)
+        printf("Es par");
+    else
+        printf("Es impar");
     return;
 }
 
 
 void main() {
     int op;
-    extern int sumarNumeros(int*);
     while (1) {
         system("clear");
         printf("MENU:\n1. Ejecutar el primer programa\n2. Ejecutar el segundo programa\n3. Ejecutar el tercer programa\n");
