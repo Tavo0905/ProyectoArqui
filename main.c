@@ -16,6 +16,7 @@ void funcion1() {
     }
     int total = sumarNumeros(numeros);
     printf("Total = %d", total);
+    getchar();
     return;
 }
 
@@ -27,7 +28,8 @@ void funcion2() {
     printf("Ingrese el exponente de la operacion: ");
     scanf("%d", &exp);
     int respuesta = exponente(base, exp);
-    printf("Total = %d", respuesta);
+    printf("Total = %d\n", respuesta);
+    getchar();
     return;
 }
 
@@ -41,6 +43,7 @@ void funcion3() {
         printf("Es par");
     else
         printf("Es impar");
+    getchar();
     return;
 }
 
@@ -49,7 +52,7 @@ void main() {
     int op;
     while (1) {
         system("clear");
-        printf("MENU:\n1. Ejecutar el primer programa\n2. Ejecutar el segundo programa\n3. Ejecutar el tercer programa\n");
+        printf("MENU:\n1. Sumar 10 numeros\n2. Elevar un numero a una potencia\n3. Paridad de un numero\n");
         printf("Ingrese una opcion: ");
         op = getchar();
         if (op == *"1") {

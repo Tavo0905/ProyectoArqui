@@ -4,7 +4,9 @@ global paridad
 
 .CODE
     paridad:
-        enter       0,0
+        push        ebp         ; inicio
+        mov         ebp, esp
+        push        ebx         ; final
         mov         eax, [ebp + 8]
         mov         ebx, 2
         sub         edx, edx
@@ -16,8 +18,6 @@ global paridad
     par:
         mov         eax, 1
     final:
-        PutLInt     eax
-        nwln
-        nwln
-        leave
+        pop         ebx
+        pop         ebp
         ret

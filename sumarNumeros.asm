@@ -4,7 +4,9 @@ global sumarNumeros
 
 .CODE
     sumarNumeros:
-        enter       0,0
+        push        ebp         ; inicio
+        mov         ebp, esp
+        push        ebx         ; final
         mov         ebx, [ebp + 8]
         mov         ecx, 10
         sub         eax, eax
@@ -12,5 +14,6 @@ global sumarNumeros
         add         eax, [ebx]
         add         ebx, 4
         loop        ciclo
-        leave
+        pop         ebx
+        pop         ebp
         ret
