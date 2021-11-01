@@ -4,20 +4,20 @@ global paridad
 
 .CODE
     paridad:
-        push        ebp         ; inicio
+        push        ebp
         mov         ebp, esp
-        push        ebx         ; final
-        mov         eax, [ebp + 8]
-        mov         ebx, 2
+        push        ebx
+        mov         eax, [ebp + 8]  ; EAX obtiene el valor a comparar
+        mov         ebx, 2          ; Mueve a EBX el divisor
         sub         edx, edx
-        div         ebx
-        cmp         edx, 0
-        je          par
-        mov         eax, 0
-        jmp         final
+        div         ebx             ; Divide el EAX con EBX
+        cmp         edx, 0          ; Si EDX es 0, es par
+        je          par             ; Salta si es igual
+        mov         eax, 0          ; Retorna un 0 si es impar
+        jmp         final           ; Salta al final
     par:
-        mov         eax, 1
+        mov         eax, 1          ; Retorna un 1 si es par
     final:
         pop         ebx
         pop         ebp
-        ret
+        ret                         ; Retorna al programa en C

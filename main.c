@@ -6,6 +6,8 @@ extern int exponente(int, int);
 extern int paridad(int);
 
 void interfaz1(int arreglo[10]) {
+    //Interfaz de la funcion de sumar 10 numeros, recibe
+    //el arreglo, y simula su ejecucion
     int eax = 0;
     int ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     int sf = 0, zf = 0, cf = 0, of = 0;
@@ -37,7 +39,6 @@ void interfaz1(int arreglo[10]) {
         }
         printf("]\n\nPresione <enter> para continuar...");
         getchar();
-
         switch (pc){
             case 0:
                 memoria[1] = ebp;
@@ -110,35 +111,13 @@ void interfaz1(int arreglo[10]) {
                 final = 0;
                 break;
         }
-        /*if (pc == 0) { memoria[1] = ebp; }
-        else if (pc == 1) { ebp = esp; }
-        else if (pc == 2) { memoria[0] = ebx; }
-        else if (pc == 3) { ebx = arreglo[0]; }
-        else if (pc == 4) { ecx = 10; }
-        else if (pc == 5) { eax = eax - eax; }
-        else if (pc == 6) { eax = eax + ebx; }
-        else if (pc == 7) { ebx = arreglo[10 - ecx + 1]; }
-        else if (pc == 8) {
-            if (ecx - 1) {
-                pc = 5;
-            }
-            ecx--;
-        }
-        else if (pc == 9) { ebx = memoria[0]; }
-        else if (pc == 10) { ebp = memoria[1]; }
-        else if (pc >= 11) { final = 0; }
-
-        if (eax == 0 && pc >= 5) { zf = 1; }
-        else { zf = 0; }
-        if (eax < 0) { sf = 1; }
-        else { sf = 0; }
-        if (-2147483648 <= eax <= 2147483647) { of = 0; }
-        else { of = 1; }*/
         pc++;
     }
 }
 
 void interfaz2(int base, int exponente){
+    //Interfaz de la funcion de exponente, recibe
+    //los parametros y simula la ejecucion
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     int sf = 0, zf = 0, cf = 0, of = 0;
     int pc = 0, ir = 0, final = 1;
@@ -148,7 +127,6 @@ void interfaz2(int base, int exponente){
     "multiplicar    EBX", "iterar    ciclo1", "saltar    fin", "mover    EAX, -1",
     "extraer    EBX","extraer    EBP", "retornar"};
     int memoria[4] = {0, 0, base, exponente};
-
     while (final){
         system("clear");
         printf("Registro PC: %d\n", pc + 1);
@@ -170,7 +148,6 @@ void interfaz2(int base, int exponente){
         }
         printf("]\n\nPresione <enter> para continuar...");
         getchar();
-
         switch (pc){
             case 0:
                 memoria[1] = ebp;
@@ -265,18 +242,13 @@ void interfaz2(int base, int exponente){
                 final = 0;
                 break;
         }
-
-        /*if (eax == 0 && pc >= 5) { zf = 1; }
-        else { zf = 0; }
-        if (eax < 0) { sf = 1; }
-        else { sf = 0; }
-        if (-2147483648 <= eax <= 2147483647) { of = 0; }
-        else { of = 1; }*/
         pc++;
     }
 }
 
 void interfaz3(int num){
+    //Interfaz de la funcion de paridad, recibe el
+    //numero por comprobar, y simula su ejecucion
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     int sf = 0, zf = 0, cf = 0, of = 0;
     int pc = 0, ir = 0, final = 1;
@@ -286,7 +258,6 @@ void interfaz3(int num){
     "saltar igual    par","mov    EAX, 0", "saltar    final", "mover    EAX, 1",
     "extraer    EBX", "extraer    EBP", "retornar"};
     int memoria[3] = {0, 0, num};
-
     while (final){
         system("clear");
         printf("Registro PC: %d\n", pc + 1);
@@ -308,7 +279,6 @@ void interfaz3(int num){
         }
         printf("]\n\nPresione <enter> para continuar...");
         getchar();
-
         switch (pc){
             case 0:
                 memoria[1] = ebp;
@@ -373,8 +343,6 @@ void interfaz3(int num){
     }
 }
 
-
-
 void funcion1() {
     getchar();
     int entrada = 0;
@@ -422,7 +390,6 @@ void funcion3() {
     getchar();
     return;
 }
-
 
 void main() {
     int op;
