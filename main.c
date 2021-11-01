@@ -6,7 +6,8 @@ extern int exponente(int, int);
 extern int paridad(int);
 
 void interfaz1(int arreglo[10]) {
-    int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
+    int eax = 0;
+    int ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     int sf = 0, zf = 0, cf = 0, of = 0;
     int pc = 0, ir = 0, final = 1;
     char instrucciones[12][25] = {"empujar    EBP", "mover    EBP, ESP",
@@ -58,26 +59,24 @@ void interfaz1(int arreglo[10]) {
                 zf = 1;
                 break;
             case 6:
+                if ((eax > 0 && ebx > 0 && 2147483647 - eax - ebx < 0) || (eax < 0 && ebx < 0 && -2147483648 + eax + ebx > 0)){
+                    of = 1;
+                    cf = 1;
+                }
+                else{
+                    of = 0;
+                    cf = 0;
+                }
                 eax = eax + ebx;
                 if (eax == 0){
                     zf = 1;
                     sf = 0;
-                    of = 0;
                 } else if (eax < 0){
                     zf = 0;
                     sf = 1;
-                    of = 0;
                 } else{
                     zf = 0;
                     sf = 0;
-                    if (-2147483648 <= eax <= 2147483647){
-                        of = 0;
-                        cf = 0;
-                    }
-                    else{
-                        of = 1;
-                        cf = 1;
-                    }
                 }
                 break;
             case 7:
@@ -85,23 +84,15 @@ void interfaz1(int arreglo[10]) {
                 if (ebx == 0){
                     zf = 1;
                     sf = 0;
-                    of = 0;
                 } else if (ebx < 0){
                     zf = 0;
                     sf = 1;
-                    of = 0;
                 } else{
                     zf = 0;
                     sf = 0;
-                    if (-2147483648 <= ebx <= 2147483647){
-                        of = 0;
-                        cf = 0;
-                    }
-                    else{
-                        of = 1;
-                        cf = 1;
-                    }
                 }
+                of = 0;
+                cf = 0;
                 break;
             case 8:
                 if (ecx - 1) {
@@ -151,9 +142,10 @@ void interfaz2(int base, int exponente){
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     int sf = 0, zf = 0, cf = 0, of = 0;
     int pc = 0, ir = 0, final = 1;
-    char instrucciones[11][25] = {"empujar    EBP", "mover    EBP, ESP",
+    char instrucciones[16][25] = {"empujar    EBP", "mover    EBP, ESP",
     "empujar    EBX", "mover    EBX, [EBP + 8]", "mover    ECX, [EBP + 12]",
-    "mover    EAX, 1", "multiplicar    EBX", "iterar    ciclo1",
+    "mover    EAX, 1", "comparar    ECX, 0", "saltar igual    fin", "saltar menor    error",
+    "multiplicar    EBX", "iterar    ciclo1", "saltar    fin", "mover    EAX, -1",
     "extraer    EBX","extraer    EBP", "retornar"};
     int memoria[4] = {0, 0, base, exponente};
 
@@ -191,38 +183,85 @@ void interfaz2(int base, int exponente){
                 break;
             case 3:
                 ebx = base;
+                if (ebx == 0){
+                    zf = 1;
+                } else{
+                    zf = 0;
+                }
+                if (ebx < 0){
+                    sf = 1;
+                } else{
+                    sf = 0;
+                }
                 break;
             case 4:
                 ecx = exponente;
+                if (ecx == 0){
+                    zf = 1;
+                } else{
+                    zf = 0;
+                }
+                if (ecx < 0){
+                    sf = 1;
+                } else{
+                    sf = 0;
+                }
                 break;
             case 5:
                 eax = 1;
                 break;
             case 6:
-                eax = eax*ebx;
-                if (-2147483648 <= eax <= 2147483647){
-                    of = 0;
-                    cf = 0;
+                if (ecx == 0){
+                    zf = 1;
                 }
-                else{
+                if (ecx < 0){
+                    sf = 1;
+                }
+                break;
+            case 7:
+                if (zf == 1){
+                    pc = 12;
+                }
+                break;
+            case 8:
+                if (sf == 1){
+                    pc = 11;
+                } 
+                break;
+            case 9:
+                if (((eax > 0 && ebx > 0 || eax < 0 && ebx < 0) && eax*ebx < 0) ||
+                ((eax > 0 && ebx < 0 || eax < 0 && ebx > 0) && eax*ebx > 0)){
                     of = 1;
                     cf = 1;
                 }
-                cf = 0;
+                else{
+                    of = 0;
+                    cf = 0;
+                }
+                eax = eax*ebx;
                 break;
-            case 7:
+            case 10:
                 if (ecx - 1){
-                    pc = 5;
+                    pc = 8;
                 }
                 ecx--;
                 break;
-            case 8:
+            case 11:
+                pc = 12;
+                break;
+            case 12:
+                eax = -1;
+                sf = 1;
+                zf = 0;
+                cf = 0;
+                break;
+            case 13:
                 ebx = memoria[0];
                 break;
-            case 9:
+            case 14:
                 ebp = memoria[1];
                 break;
-            case 10:
+            case 15:
                 final = 0;
                 break;
         }
