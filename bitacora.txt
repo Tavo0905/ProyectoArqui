@@ -1,5 +1,0 @@
-nasm -f elf sumarNumeros.asm -o sumar.o
-nasm -f elf paridad.asm -o par.o
-nasm -f elf exponente.asm -o exp.o
-gcc -m32 main.c sumar.o par.o exp.o io.o -o main.out
-./main.out
