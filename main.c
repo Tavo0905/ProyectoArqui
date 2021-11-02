@@ -12,7 +12,7 @@ void interfaz1(int arreglo[10]) {
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
-    int pc = 0, ir = 0, final = 1;
+    int pc = 0, ir = 6, final = 1;
     char instrucciones[12][25] = {"empujar    EBP", "mover    EBP, ESP",
     "empujar    EBX", "mover    EBX, [EBP + 8]", "mover    ECX, 10",
     "restar    EAX, EAX", "sumar    EAX, [EBX]", "sumar    EBX, 4", "iterar    ciclo",
@@ -43,22 +43,28 @@ void interfaz1(int arreglo[10]) {
         switch (pc){
             case 0:
                 memoria[1] = ebp;
+                ir = 1;
                 break;
             case 1:
                 ebp = esp;
+                ir = 6;
                 break;
             case 2:
                 memoria[0] = ebx;
+                ir = 1;
                 break;
             case 3:
                 ebx = arreglo[0];
+                ir = 1;
                 break;
             case 4:
                 ecx = 10;
+                ir = 3;
                 break;
             case 5:
                 eax = eax - eax;
                 zf = 1;
+                ir = 2;
                 break;
             case 6:
                 if ((eax > 0 && ebx > 0 && 2147483647 - eax - ebx < 0) || (eax < 0 && ebx < 0 && -2147483648 + eax + ebx > 0)){
@@ -80,6 +86,7 @@ void interfaz1(int arreglo[10]) {
                     zf = 0;
                     sf = 0;
                 }
+                ir = 2;
                 break;
             case 7:
                 ebx = arreglo[10 - ecx + 1];
@@ -95,25 +102,31 @@ void interfaz1(int arreglo[10]) {
                 }
                 of = 0;
                 cf = 0;
+                ir = 8;
                 break;
             case 8:
                 if (ecx - 1) {
                     pc = 5;
+                    ir = 2;
+                }
+                else {
+                    ir = 7;
                 }
                 ecx--;
                 break;
             case 9:
                 ebx = memoria[0];
+                ir = 7;
                 break;
             case 10:
                 ebp = memoria[1];
+                ir = 9;
                 break;
             case 11:
                 final = 0;
                 break;
         }
         pc++;
-
         if (eax >= 0){
             ceax = *" ";
         } else{
@@ -153,7 +166,7 @@ void interfaz2(int base, int exponente){
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
-    int pc = 0, ir = 0, final = 1;
+    int pc = 0, ir = 6, final = 1;
     char instrucciones[16][25] = {"empujar    EBP", "mover    EBP, ESP",
     "empujar    EBX", "mover    EBX, [EBP + 8]", "mover    ECX, [EBP + 12]",
     "mover    EAX, 1", "comparar    ECX, 0", "saltar igual    fin", "saltar menor    error",
@@ -184,12 +197,15 @@ void interfaz2(int base, int exponente){
         switch (pc){
             case 0:
                 memoria[1] = ebp;
+                ir = 1;
                 break;
             case 1:
                 ebp = esp;
+                ir = 6;
                 break;
             case 2:
                 memoria[0] = ebx;
+                ir = 1;
                 break;
             case 3:
                 ebx = base;
@@ -203,6 +219,7 @@ void interfaz2(int base, int exponente){
                 } else{
                     sf = 0;
                 }
+                ir = 1;
                 break;
             case 4:
                 ecx = exponente;
@@ -216,9 +233,11 @@ void interfaz2(int base, int exponente){
                 } else{
                     sf = 0;
                 }
+                ir = 1;
                 break;
             case 5:
                 eax = 1;
+                ir = 10;
                 break;
             case 6:
                 if (ecx == 0){
@@ -227,16 +246,25 @@ void interfaz2(int base, int exponente){
                 if (ecx < 0){
                     sf = 1;
                 }
+                ir = 12;
                 break;
             case 7:
                 if (zf == 1){
                     pc = 12;
+                    ir = 7;
+                }
+                else {
+                    ir = 14;
                 }
                 break;
             case 8:
                 if (sf == 1){
                     pc = 11;
+                    ir = 1;
                 } 
+                else {
+                    ir = 4;
+                }
                 break;
             case 9:
                 if (((eax > 0 && ebx > 0 || eax < 0 && ebx < 0) && eax*ebx < 0) ||
@@ -249,34 +277,42 @@ void interfaz2(int base, int exponente){
                     cf = 0;
                 }
                 eax = eax*ebx;
+                ir = 8;
                 break;
             case 10:
                 if (ecx - 1){
                     pc = 8;
+                    ir = 4;
+                }
+                else {
+                    ir = 11;
                 }
                 ecx--;
                 break;
             case 11:
                 pc = 12;
+                ir = 7;
                 break;
             case 12:
                 eax = -1;
                 sf = 1;
                 zf = 0;
                 cf = 0;
+                ir = 7;
                 break;
             case 13:
                 ebx = memoria[0];
+                ir = 7;
                 break;
             case 14:
                 ebp = memoria[1];
+                ir = 9;
                 break;
             case 15:
                 final = 0;
                 break;
         }
         pc++;
-
         if (eax >= 0){
             ceax = *" ";
         } else{
@@ -316,7 +352,7 @@ void interfaz3(int num){
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
-    int pc = 0, ir = 0, final = 1;
+    int pc = 0, ir = 6, final = 1;
     char instrucciones[15][25] = {"empujar    EBP", "mover    EBP, ESP",
     "empujar    EBX", "mover    EAX, [EBP + 8]", "mover    EBX, 2",
     "restar    EDX, EDX", "dividir    EBX", "comparar    EDX, 0",
@@ -347,21 +383,27 @@ void interfaz3(int num){
         switch (pc){
             case 0:
                 memoria[1] = ebp;
+                ir = 1;
                 break;
             case 1:
                 ebp = esp;
+                ir = 6;
                 break;
             case 2:
                 memoria[0] = ebx;
+                ir = 1;
                 break;
             case 3:
                 eax = num;
+                ir = 1;
                 break;
             case 4:
                 ebx = 2;
+                ir = 3;
                 break;
             case 5:
                 edx = edx - edx;
+                ir = 5;
                 zf = 1;
                 break;
             case 6:
@@ -371,6 +413,7 @@ void interfaz3(int num){
                 of = 0;
                 zf = 0;
                 sf = 0;
+                ir = 10;
                 break;
             case 7:
                 if (edx == 0){
@@ -379,33 +422,42 @@ void interfaz3(int num){
                 if (edx < 0){
                     sf = 1;
                 }
+                ir = 12;
                 break;
             case 8:
                 if (zf == 1){
                     pc = 10;
+                    ir = 1;
+                }
+                else {
+                    ir = 1;
                 }
                 break;
             case 9:
                 eax = 0;
+                ir = 11;
                 break;
             case 10:
                 pc = 11;
+                ir = 7;
                 break;
             case 11:
                 eax = 1;
+                ir = 7;
                 break;
             case 12:
                 ebx = memoria[0];
+                ir = 7;
                 break;
             case 13:
                 ebp = memoria[1];
+                ir = 9;
                 break;
             case 14:
                 final = 0;
                 break;
         }
         pc++;
-
         if (eax >= 0){
             ceax = *" ";
         } else{
