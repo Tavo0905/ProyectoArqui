@@ -4,12 +4,13 @@
 extern int sumarNumeros(int*);
 extern int exponente(int, int);
 extern int paridad(int);
+int toBinary(int);
 
 void interfaz1(int arreglo[10]) {
     //Interfaz de la funcion de sumar 10 numeros, recibe
     //el arreglo, y simula su ejecucion
-    int eax = 0;
-    int ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
+    int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
+    char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
     int pc = 0, ir = 0, final = 1;
     char instrucciones[12][25] = {"empujar    EBP", "mover    EBP, ESP",
@@ -20,21 +21,21 @@ void interfaz1(int arreglo[10]) {
     arreglo[4], arreglo[5], arreglo[6], arreglo[7], arreglo[8], arreglo[9]};
     while (final) {
         system("clear");
-        printf("Registro PC: %d\n", pc + 1);
-        printf("Registro de Instrucciones: %d\n\n", ir);
-        printf("Registro EAX: %d         \t\tBandera SF: %d\
-        \nRegistro EBX: %d         \t\tBandera ZF: %d\n", eax, sf, ebx, zf);
-        printf("Registro ECX: %d         \t\tBandera CF: %d\
-        \nRegistro EDX: %d         \t\tBandera OF: %d\n", ecx, cf, edx, of);
-        printf("Registro EBP: %d\nRegistro ESP: %d", ebp, esp);
+        printf("Registro PC: %d\n", toBinary(pc + 1));
+        printf("Registro de Instrucciones: %d\n\n", toBinary(ir));
+        printf("Registro EAX: %d%c        \t\tBandera SF: %d\
+        \nRegistro EBX: %d%c        \t\tBandera ZF: %d\n", toBinary(eax), ceax, sf, toBinary(ebx), cebx, zf);
+        printf("Registro ECX: %d%c        \t\tBandera CF: %d\
+        \nRegistro EDX: %d%c        \t\tBandera OF: %d\n", toBinary(ecx), cecx, cf, toBinary(edx), cedx, of);
+        printf("Registro EBP: %d%c\nRegistro ESP: %d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
         printf("\n\nInstruccion: %s\n\n", instrucciones[pc]);
         printf("\nMemoria: [");
         for (int i = 0; i < 12; i++) {
             if (i != 11){ 
-                printf(" %d,", memoria[i]);
+                printf(" %X,", memoria[i]);
             }
             else{
-                printf(" %d", memoria[i]);
+                printf(" %X", memoria[i]);
             }
         }
         printf("]\n\nPresione <enter> para continuar...");
@@ -112,6 +113,37 @@ void interfaz1(int arreglo[10]) {
                 break;
         }
         pc++;
+
+        if (eax >= 0){
+            ceax = *" ";
+        } else{
+            ceax = *"c";
+        }
+        if (ebx >= 0){
+            cebx = *" ";
+        } else{
+            cebx = *"c";
+        }
+        if (ecx >= 0){
+            cecx = *" ";
+        } else{
+            cecx = *"c";
+        }
+        if (edx >= 0){
+            cedx = *" ";
+        } else{
+            cedx = *"c";
+        }
+        if (ebp >= 0){
+            cebp = *" ";
+        } else{
+            cebp = *"c";
+        }
+        if (esp >= 0){
+            cesp = *" ";
+        } else{
+            cesp = *"c";
+        }
     }
 }
 
@@ -119,6 +151,7 @@ void interfaz2(int base, int exponente){
     //Interfaz de la funcion de exponente, recibe
     //los parametros y simula la ejecucion
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
+    char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
     int pc = 0, ir = 0, final = 1;
     char instrucciones[16][25] = {"empujar    EBP", "mover    EBP, ESP",
@@ -129,21 +162,21 @@ void interfaz2(int base, int exponente){
     int memoria[4] = {0, 0, base, exponente};
     while (final){
         system("clear");
-        printf("Registro PC: %d\n", pc + 1);
-        printf("Registro de Instrucciones: %d\n\n", ir);
-        printf("Registro EAX: %d         \t\tBandera SF: %d\
-        \nRegistro EBX: %d         \t\tBandera ZF: %d\n", eax, sf, ebx, zf);
-        printf("Registro ECX: %d         \t\tBandera CF: %d\
-        \nRegistro EDX: %d         \t\tBandera OF: %d\n", ecx, cf, edx, of);
-        printf("Registro EBP: %d\nRegistro ESP: %d", ebp, esp);
+        printf("Registro PC: %d\n", toBinary(pc + 1));
+        printf("Registro de Instrucciones: %d\n\n", toBinary(ir));
+        printf("Registro EAX: %d%c        \t\tBandera SF: %d\
+        \nRegistro EBX: %d%c        \t\tBandera ZF: %d\n", toBinary(eax), ceax, sf, toBinary(ebx), cebx, zf);
+        printf("Registro ECX: %d%c        \t\tBandera CF: %d\
+        \nRegistro EDX: %d%c        \t\tBandera OF: %d\n", toBinary(ecx), cecx, cf, toBinary(edx), cedx, of);
+        printf("Registro EBP: %d%c\nRegistro ESP: %d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
         printf("\n\nInstruccion: %s\n\n", instrucciones[pc]);
         printf("\nMemoria: [");
         for (int i = 0; i < 4; i++) {
             if (i != 3){ 
-                printf(" %d,", memoria[i]);
+                printf(" %X,", memoria[i]);
             }
             else{
-                printf(" %d", memoria[i]);
+                printf(" %X", memoria[i]);
             }
         }
         printf("]\n\nPresione <enter> para continuar...");
@@ -243,6 +276,37 @@ void interfaz2(int base, int exponente){
                 break;
         }
         pc++;
+
+        if (eax >= 0){
+            ceax = *" ";
+        } else{
+            ceax = *"c";
+        }
+        if (ebx >= 0){
+            cebx = *" ";
+        } else{
+            cebx = *"c";
+        }
+        if (ecx >= 0){
+            cecx = *" ";
+        } else{
+            cecx = *"c";
+        }
+        if (edx >= 0){
+            cedx = *" ";
+        } else{
+            cedx = *"c";
+        }
+        if (ebp >= 0){
+            cebp = *" ";
+        } else{
+            cebp = *"c";
+        }
+        if (esp >= 0){
+            cesp = *" ";
+        } else{
+            cesp = *"c";
+        }
     }
 }
 
@@ -250,6 +314,7 @@ void interfaz3(int num){
     //Interfaz de la funcion de paridad, recibe el
     //numero por comprobar, y simula su ejecucion
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
+    char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
     int pc = 0, ir = 0, final = 1;
     char instrucciones[15][25] = {"empujar    EBP", "mover    EBP, ESP",
@@ -260,21 +325,21 @@ void interfaz3(int num){
     int memoria[3] = {0, 0, num};
     while (final){
         system("clear");
-        printf("Registro PC: %d\n", pc + 1);
-        printf("Registro de Instrucciones: %d\n\n", ir);
-        printf("Registro EAX: %d         \t\tBandera SF: %d\
-        \nRegistro EBX: %d         \t\tBandera ZF: %d\n", eax, sf, ebx, zf);
-        printf("Registro ECX: %d         \t\tBandera CF: %d\
-        \nRegistro EDX: %d         \t\tBandera OF: %d\n", ecx, cf, edx, of);
-        printf("Registro EBP: %d\nRegistro ESP: %d", ebp, esp);
+        printf("Registro PC: %d\n", toBinary(pc + 1));
+        printf("Registro de Instrucciones: %d\n\n", toBinary(ir));
+        printf("Registro EAX: %d%c        \t\tBandera SF: %d\
+        \nRegistro EBX: %d%c        \t\tBandera ZF: %d\n", toBinary(eax), ceax, sf, toBinary(ebx), cebx, zf);
+        printf("Registro ECX: %d%c        \t\tBandera CF: %d\
+        \nRegistro EDX: %d%c        \t\tBandera OF: %d\n", toBinary(ecx), cecx, cf, toBinary(edx), cedx, of);
+        printf("Registro EBP: %d%c\nRegistro ESP: %d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
         printf("\n\nInstruccion: %s\n\n", instrucciones[pc]);
         printf("\nMemoria: [");
         for (int i = 0; i < 3; i++) {
             if (i != 2){ 
-                printf(" %d,", memoria[i]);
+                printf(" %X,", memoria[i]);
             }
             else{
-                printf(" %d", memoria[i]);
+                printf(" %X", memoria[i]);
             }
         }
         printf("]\n\nPresione <enter> para continuar...");
@@ -340,6 +405,37 @@ void interfaz3(int num){
                 break;
         }
         pc++;
+
+        if (eax >= 0){
+            ceax = *" ";
+        } else{
+            ceax = *"c";
+        }
+        if (ebx >= 0){
+            cebx = *" ";
+        } else{
+            cebx = *"c";
+        }
+        if (ecx >= 0){
+            cecx = *" ";
+        } else{
+            cecx = *"c";
+        }
+        if (edx >= 0){
+            cedx = *" ";
+        } else{
+            cedx = *"c";
+        }
+        if (ebp >= 0){
+            cebp = *" ";
+        } else{
+            cebp = *"c";
+        }
+        if (esp >= 0){
+            cesp = *" ";
+        } else{
+            cesp = *"c";
+        }
     }
 }
 
@@ -389,6 +485,58 @@ void funcion3() {
         printf("Es impar");
     getchar();
     return;
+}
+
+int twosComplement(int binArray[100], int size){
+    int i;
+    int result = 1;
+    for (i = 1; i <= size; i++){
+        if (binArray[i] == 1){
+            binArray[i] = 0;
+        } else{
+            binArray[i] = 1;
+        }
+    }
+
+    for (i = 1; i <= size; i++){
+        if (binArray[i] == 1){
+            binArray[i] = 0;
+        } else{
+            binArray[i] = 1;
+            break;
+        }
+    }
+
+    for (int j = size ;j> 0;j--){
+        result = result*10 + binArray[j];
+    }
+
+    return result;
+}
+
+int toBinary(int decimalNumber){
+    int binaryNumber = 0;
+    int negative = 0;
+    if (decimalNumber < 0){
+        negative = 1;
+        decimalNumber = 0 - decimalNumber;
+    }
+
+    int binaryArray[100],i=1,j;
+	int quotient = decimalNumber;
+	while(quotient!=0) {
+        binaryArray[i++] = quotient % 2;
+		quotient = quotient / 2;
+	}
+
+    if (negative == 1){
+        return twosComplement(binaryArray, i-1);
+    }
+
+	for (j = i -1 ;j> 0;j--){
+        binaryNumber = binaryNumber*10 + binaryArray[j];
+    }
+	return binaryNumber;
 }
 
 void main() {
