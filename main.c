@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Declaración de las funciones NASM y auxiliares
 extern int sumarNumeros(int*);
 extern int exponente(int, int);
 extern int paridad(int);
@@ -9,6 +10,7 @@ int toBinary(int);
 void interfaz1(int arreglo[10]) {
     //Interfaz de la funcion de sumar 10 numeros, recibe
     //el arreglo, y simula su ejecucion
+    // Inicio de variables para la simulacion
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
@@ -19,7 +21,7 @@ void interfaz1(int arreglo[10]) {
     "extraer    EBX","extraer    EBP", "retornar"};
     int memoria[12] = {0, 0, arreglo[0], arreglo[1], arreglo[2], arreglo[3],
     arreglo[4], arreglo[5], arreglo[6], arreglo[7], arreglo[8], arreglo[9]};
-    while (final) {
+    while (final) {             // Interfaz de la simulación
         system("clear");
         printf("Registro PC: %08d\n", toBinary(pc + 1));
         printf("Registro de Instrucciones: %08d\n\n", toBinary(ir));
@@ -30,7 +32,7 @@ void interfaz1(int arreglo[10]) {
         printf("Registro EBP: %08d%c\nRegistro ESP: %08d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
         printf("\n\nInstruccion: %s\n\n", instrucciones[pc]);
         printf("\nMemoria: [");
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 12; i++) {      // Imprime la memoria del computador
             if (i != 11){ 
                 printf(" %04X,", memoria[i]);
             }
@@ -40,10 +42,10 @@ void interfaz1(int arreglo[10]) {
         }
         printf("]\n\nPresione <enter> para continuar...");
         getchar();
-        switch (pc){
+        switch (pc){            // Simula cada una de las instrucciones
             case 0:
-                switch (fetch) {
-                    case 0:
+                switch (fetch) {        // Simula cada etapa del ciclo de fetch
+                    case 0:             // por instrucción
                         ir = 6;
                         break;
                     case 1:
@@ -248,7 +250,7 @@ void interfaz1(int arreglo[10]) {
                 break;
         }
         fetch++;
-        if (eax >= 0){
+        if (eax >= 0){      // Imprime el complemento a dos de cada registro
             ceax = *" ";
         } else{
             ceax = *"c";
@@ -284,6 +286,7 @@ void interfaz1(int arreglo[10]) {
 void interfaz2(int base, int exponente){
     //Interfaz de la funcion de exponente, recibe
     //los parametros y simula la ejecucion
+    // Inicio de variables para la simulacion
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
@@ -295,7 +298,7 @@ void interfaz2(int base, int exponente){
     "extraer    EBX","extraer    EBP", "retornar"};
     int memoria[4] = {0, 0, base, exponente};
     while (final){
-        system("clear");
+        system("clear");        // Interfaz de la simulación
         printf("Registro PC: %08d\n", toBinary(pc + 1));
         printf("Registro de Instrucciones: %08d\n\n", toBinary(ir));
         printf("Registro EAX: %08d%c        \t\tBandera SF: %d\
@@ -305,7 +308,7 @@ void interfaz2(int base, int exponente){
         printf("Registro EBP: %08d%c\nRegistro ESP: %08d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
         printf("\n\nInstruccion: %s\n\n", instrucciones[pc]);
         printf("\nMemoria: [");
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {       // Imprime la memoria del computador
             if (i != 3){ 
                 printf(" %04X,", memoria[i]);
             }
@@ -315,10 +318,10 @@ void interfaz2(int base, int exponente){
         }
         printf("]\n\nPresione <enter> para continuar...");
         getchar();
-        switch (pc){
+        switch (pc){            // Simula cada una de las instrucciones del programa
             case 0:
-                switch (fetch) {
-                    case 0:
+                switch (fetch) {        // Simula cada una de las etapas del
+                    case 0:             // Ciclo de fetch por instrucción
                         ir = 6;
                         break;
                     case 1:
@@ -591,7 +594,7 @@ void interfaz2(int base, int exponente){
                 break;
         }
         fetch++;
-        if (eax >= 0){
+        if (eax >= 0){      // Imprime el complemento a dos de cada registro
             ceax = *" ";
         } else{
             ceax = *"c";
@@ -627,6 +630,7 @@ void interfaz2(int base, int exponente){
 void interfaz3(int num){
     //Interfaz de la funcion de paridad, recibe el
     //numero por comprobar, y simula su ejecucion
+    // Inicio de variables para la simulacion
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
@@ -638,7 +642,7 @@ void interfaz3(int num){
     "extraer    EBX", "extraer    EBP", "retornar"};
     int memoria[3] = {0, 0, num};
     while (final){
-        system("clear");
+        system("clear");            // Interfaz de la simulacion
         printf("Registro PC: %08d\n", toBinary(pc + 1));
         printf("Registro de Instrucciones: %08d\n\n", toBinary(ir));
         printf("Registro EAX: %08d%c        \t\tBandera SF: %d\
@@ -648,7 +652,7 @@ void interfaz3(int num){
         printf("Registro EBP: %08d%c\nRegistro ESP: %08d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
         printf("\n\nInstruccion: %s\n\n", instrucciones[pc]);
         printf("\nMemoria: [");
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) { // Imprime la memoria del computador
             if (i != 2){ 
                 printf(" %04X,", memoria[i]);
             }
@@ -658,10 +662,10 @@ void interfaz3(int num){
         }
         printf("]\n\nPresione <enter> para continuar...");
         getchar();
-        switch (pc){
+        switch (pc){        // Simula cada una de las instrucciones
             case 0:
-                switch (fetch) {
-                    case 0:
+                switch (fetch) {        // Simula cada uno de los ciclos de fetch
+                    case 0:             // De cada instruccion
                         ir = 6;
                         break;
                     case 1:
@@ -885,7 +889,7 @@ void interfaz3(int num){
                 break;
         }
         fetch++;
-        if (eax >= 0){
+        if (eax >= 0){      //  Valida el complemento a dos de cada registro
             ceax = *" ";
         } else{
             ceax = *"c";
@@ -919,49 +923,58 @@ void interfaz3(int num){
 }
 
 void funcion1() {
+    // FUNCION DE SUMA DE 10 NUMEROS
+    // Recibe los numeros ingresados por el usuario
+    // Y los ejecuta en NASM y empieza la simulación
     getchar();
     int entrada = 0;
     int numeros[10];
     for (int i = 0; i < 10; i++) {
-        printf("Ingrese el numero %d: ", i + 1);
+        printf("Ingrese el numero %d: ", i + 1);    // Recibe 10 números
         scanf("%d", &entrada);
         numeros[i] = entrada;
     }
-    int total = sumarNumeros(numeros);
+    int total = sumarNumeros(numeros);              // Llama a la función de NASM
     getchar();
-    interfaz1(numeros);
+    interfaz1(numeros);                             // Inicia la simulación
     printf("\nTotal = %d", total);
     getchar();
     return;
 }
 
 void funcion2() {
+    // FUNCION DE EXPONENTE
+    // Recibe los numeros ingresados por el usuario y
+    // Llama a la funcion en NASM y empieza el simulador
     getchar();
     int base, exp;
     printf("Ingrese la base de la operacion: ");
     scanf("%d", &base);
     printf("Ingrese el exponente de la operacion: ");
     scanf("%d", &exp);
-    int respuesta = exponente(base, exp);
+    int respuesta = exponente(base, exp);   // Llama a la funcion en NASM
     getchar();
-    interfaz2(base, exp);
-    printf("Total = %d\n", respuesta);
+    interfaz2(base, exp);                   // Simula el programa en NASM
+    printf("\nTotal = %d\n", respuesta);
     getchar();
     return;
 }
 
 void funcion3() {
+    // FUNCION DE PARIDAD
+    // Recibe la entrada del usuario y
+    // Llama a la funcion de NASM y ejecuta el simulador
     getchar();
     int num;
     printf("Ingrese un numero: ");
     scanf("%d", &num);
-    int par = paridad(num);
+    int par = paridad(num);     // Llama a la funcion en NASM
     getchar();
-    interfaz3(num);
-    if (par == 1)
-        printf("Es par");
+    interfaz3(num);             // Ejecucion del simulador
+    if (par == 1)               // Imprime el resultado según la salida de NASM
+        printf("\nEs par");
     else
-        printf("Es impar");
+        printf("\nEs impar");
     getchar();
     return;
 }
@@ -1019,23 +1032,24 @@ int toBinary(int decimalNumber){
 }
 
 void main() {
+    // Menú principal del simulador, pide una entrada al usuario
     int op;
     while (1) {
         system("clear");
         printf("MENU:\n1. Sumar 10 numeros\n2. Elevar un numero a una potencia\n3. Paridad de un numero\n");
-        printf("Ingrese una opcion: ");
+        printf("0. Salir\nIngrese una opcion: ");
         op = getchar();
         if (op == *"1") {
-            funcion1();
+            funcion1();     // Ejecuta el sumador de 10 números
         }
         else if (op == *"2") {
-            funcion2();
+            funcion2();     // Ejecuta la función de exponente
         }
         else if (op == *"3") {
-            funcion3();
+            funcion3();     // Ejecuta la función de paridad
         }
         else if (op == *"0"){
-            break;
+            break;          // Se sale del programa
         }
         else {
             printf("\nLa entrada ingresada no es valida, por favor intente de nuevo\n");
