@@ -12,7 +12,7 @@ void interfaz1(int arreglo[10]) {
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
-    int pc = 0, ir = 6, final = 1;
+    int pc = 0, ir = 0, final = 1, fetch = 0;
     char instrucciones[12][25] = {"empujar    EBP", "mover    EBP, ESP",
     "empujar    EBX", "mover    EBX, [EBP + 8]", "mover    ECX, 10",
     "restar    EAX, EAX", "sumar    EAX, [EBX]", "sumar    EBX, 4", "iterar    ciclo",
@@ -21,112 +21,233 @@ void interfaz1(int arreglo[10]) {
     arreglo[4], arreglo[5], arreglo[6], arreglo[7], arreglo[8], arreglo[9]};
     while (final) {
         system("clear");
-        printf("Registro PC: %d\n", toBinary(pc + 1));
-        printf("Registro de Instrucciones: %d\n\n", toBinary(ir));
-        printf("Registro EAX: %d%c        \t\tBandera SF: %d\
-        \nRegistro EBX: %d%c        \t\tBandera ZF: %d\n", toBinary(eax), ceax, sf, toBinary(ebx), cebx, zf);
-        printf("Registro ECX: %d%c        \t\tBandera CF: %d\
-        \nRegistro EDX: %d%c        \t\tBandera OF: %d\n", toBinary(ecx), cecx, cf, toBinary(edx), cedx, of);
-        printf("Registro EBP: %d%c\nRegistro ESP: %d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
+        printf("Registro PC: %08d\n", toBinary(pc + 1));
+        printf("Registro de Instrucciones: %08d\n\n", toBinary(ir));
+        printf("Registro EAX: %08d%c        \t\tBandera SF: %d\
+        \nRegistro EBX: %08d%c        \t\tBandera ZF: %d\n", toBinary(eax), ceax, sf, toBinary(ebx), cebx, zf);
+        printf("Registro ECX: %08d%c        \t\tBandera CF: %d\
+        \nRegistro EDX: %08d%c        \t\tBandera OF: %d\n", toBinary(ecx), cecx, cf, toBinary(edx), cedx, of);
+        printf("Registro EBP: %08d%c\nRegistro ESP: %08d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
         printf("\n\nInstruccion: %s\n\n", instrucciones[pc]);
         printf("\nMemoria: [");
         for (int i = 0; i < 12; i++) {
             if (i != 11){ 
-                printf(" %X,", memoria[i]);
+                printf(" %04X,", memoria[i]);
             }
             else{
-                printf(" %X", memoria[i]);
+                printf(" %04X", memoria[i]);
             }
         }
         printf("]\n\nPresione <enter> para continuar...");
         getchar();
         switch (pc){
             case 0:
-                memoria[1] = ebp;
-                ir = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 6;
+                        break;
+                    case 1:
+                        memoria[1] = ebp;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 1:
-                ebp = esp;
-                ir = 6;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        ebp = esp;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 2:
-                memoria[0] = ebx;
-                ir = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 6;
+                        break;
+                    case 1:
+                        memoria[0] = ebx;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 3:
-                ebx = arreglo[0];
-                ir = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        ebx = arreglo[0];
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 4:
-                ecx = 10;
-                ir = 3;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        ecx = 10;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 5:
-                eax = eax - eax;
-                zf = 1;
-                ir = 2;
+                switch (fetch) {
+                    case 0:
+                        ir = 3;
+                        break;
+                    case 1:
+                        eax = eax - eax;
+                        zf = 1;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 6:
-                if ((eax > 0 && ebx > 0 && 2147483647 - eax - ebx < 0) || (eax < 0 && ebx < 0 && -2147483648 + eax + ebx > 0)){
-                    of = 1;
-                    cf = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 2;
+                        break;
+                    case 1:
+                        if ((eax > 0 && ebx > 0 && 2147483647 - eax - ebx < 0) || (eax < 0 && ebx < 0 && -2147483648 + eax + ebx > 0)){
+                            of = 1;
+                            cf = 1;
+                        }
+                        else{
+                            of = 0;
+                            cf = 0;
+                        }
+                        eax = eax + ebx;
+                        if (eax == 0){
+                            zf = 1;
+                            sf = 0;
+                        } else if (eax < 0){
+                            zf = 0;
+                            sf = 1;
+                        } else{
+                            zf = 0;
+                            sf = 0;
+                        }
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
                 }
-                else{
-                    of = 0;
-                    cf = 0;
-                }
-                eax = eax + ebx;
-                if (eax == 0){
-                    zf = 1;
-                    sf = 0;
-                } else if (eax < 0){
-                    zf = 0;
-                    sf = 1;
-                } else{
-                    zf = 0;
-                    sf = 0;
-                }
-                ir = 2;
                 break;
             case 7:
-                ebx = arreglo[10 - ecx + 1];
-                if (ebx == 0){
-                    zf = 1;
-                    sf = 0;
-                } else if (ebx < 0){
-                    zf = 0;
-                    sf = 1;
-                } else{
-                    zf = 0;
-                    sf = 0;
+                switch (fetch) {
+                    case 0:
+                        ir = 2;
+                        break;
+                    case 1:
+                        ebx = arreglo[10 - ecx + 1];
+                        if (ebx == 0){
+                            zf = 1;
+                            sf = 0;
+                        } else if (ebx < 0){
+                            zf = 0;
+                            sf = 1;
+                        } else{
+                            zf = 0;
+                            sf = 0;
+                        }
+                        of = 0;
+                        cf = 0;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
                 }
-                of = 0;
-                cf = 0;
-                ir = 8;
                 break;
             case 8:
-                if (ecx - 1) {
-                    pc = 5;
-                    ir = 2;
+                switch (fetch) {
+                    case 0:
+                        ir = 8;
+                        break;
+                    case 1:
+                        ecx--;
+                        break;
+                    case 2:
+                        if (ecx - 1) {
+                            pc = 6;
+                        }
+                        else {
+                            pc++;
+                        }
+                        fetch = -1;
+                        break;
                 }
-                else {
-                    ir = 7;
-                }
-                ecx--;
                 break;
             case 9:
-                ebx = memoria[0];
-                ir = 7;
+                switch (fetch) {
+                    case 0:
+                        ir = 7;
+                        break;
+                    case 1:
+                        ebx = memoria[0];
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 10:
-                ebp = memoria[1];
-                ir = 9;
+                switch (fetch) {
+                    case 0:
+                        ir = 7;
+                        break;
+                    case 1:
+                        ebp = memoria[1];
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 11:
-                final = 0;
+                switch (fetch) {
+                    case 0:
+                        ir = 9;
+                        break;
+                    case 1:
+                        ebp = memoria[1];
+                        final = 0;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
         }
-        pc++;
+        fetch++;
         if (eax >= 0){
             ceax = *" ";
         } else{
@@ -166,7 +287,7 @@ void interfaz2(int base, int exponente){
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
-    int pc = 0, ir = 6, final = 1;
+    int pc = 0, ir = 0, final = 1, fetch = 0;
     char instrucciones[16][25] = {"empujar    EBP", "mover    EBP, ESP",
     "empujar    EBX", "mover    EBX, [EBP + 8]", "mover    ECX, [EBP + 12]",
     "mover    EAX, 1", "comparar    ECX, 0", "saltar igual    fin", "saltar menor    error",
@@ -175,144 +296,301 @@ void interfaz2(int base, int exponente){
     int memoria[4] = {0, 0, base, exponente};
     while (final){
         system("clear");
-        printf("Registro PC: %d\n", toBinary(pc + 1));
-        printf("Registro de Instrucciones: %d\n\n", toBinary(ir));
-        printf("Registro EAX: %d%c        \t\tBandera SF: %d\
-        \nRegistro EBX: %d%c        \t\tBandera ZF: %d\n", toBinary(eax), ceax, sf, toBinary(ebx), cebx, zf);
-        printf("Registro ECX: %d%c        \t\tBandera CF: %d\
-        \nRegistro EDX: %d%c        \t\tBandera OF: %d\n", toBinary(ecx), cecx, cf, toBinary(edx), cedx, of);
-        printf("Registro EBP: %d%c\nRegistro ESP: %d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
+        printf("Registro PC: %08d\n", toBinary(pc + 1));
+        printf("Registro de Instrucciones: %08d\n\n", toBinary(ir));
+        printf("Registro EAX: %08d%c        \t\tBandera SF: %d\
+        \nRegistro EBX: %08d%c        \t\tBandera ZF: %d\n", toBinary(eax), ceax, sf, toBinary(ebx), cebx, zf);
+        printf("Registro ECX: %08d%c        \t\tBandera CF: %d\
+        \nRegistro EDX: %08d%c        \t\tBandera OF: %d\n", toBinary(ecx), cecx, cf, toBinary(edx), cedx, of);
+        printf("Registro EBP: %08d%c\nRegistro ESP: %08d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
         printf("\n\nInstruccion: %s\n\n", instrucciones[pc]);
         printf("\nMemoria: [");
         for (int i = 0; i < 4; i++) {
             if (i != 3){ 
-                printf(" %X,", memoria[i]);
+                printf(" %04X,", memoria[i]);
             }
             else{
-                printf(" %X", memoria[i]);
+                printf(" %04X", memoria[i]);
             }
         }
         printf("]\n\nPresione <enter> para continuar...");
         getchar();
         switch (pc){
             case 0:
-                memoria[1] = ebp;
-                ir = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 6;
+                        break;
+                    case 1:
+                        memoria[1] = ebp;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 1:
-                ebp = esp;
-                ir = 6;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        ebp = esp;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 2:
-                memoria[0] = ebx;
-                ir = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 6;
+                        break;
+                    case 1:
+                        memoria[0] = ebx;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 3:
-                ebx = base;
-                if (ebx == 0){
-                    zf = 1;
-                } else{
-                    zf = 0;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        ebx = base;
+                        if (ebx == 0){
+                            zf = 1;
+                        } else{
+                            zf = 0;
+                        }
+                        if (ebx < 0){
+                            sf = 1;
+                        } else{
+                            sf = 0;
+                        }
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
                 }
-                if (ebx < 0){
-                    sf = 1;
-                } else{
-                    sf = 0;
-                }
-                ir = 1;
                 break;
             case 4:
-                ecx = exponente;
-                if (ecx == 0){
-                    zf = 1;
-                } else{
-                    zf = 0;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        ecx = exponente;
+                        if (ecx == 0){
+                            zf = 1;
+                        } else{
+                            zf = 0;
+                        }
+                        if (ecx < 0){
+                            sf = 1;
+                        } else{
+                            sf = 0;
+                        }
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
                 }
-                if (ecx < 0){
-                    sf = 1;
-                } else{
-                    sf = 0;
-                }
-                ir = 1;
                 break;
             case 5:
-                eax = 1;
-                ir = 10;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        eax = 1;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 6:
-                if (ecx == 0){
-                    zf = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 10;
+                        break;
+                    case 1:
+                        if (ecx == 0){
+                            zf = 1;
+                        }
+                        if (ecx < 0){
+                            sf = 1;
+                        }
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
                 }
-                if (ecx < 0){
-                    sf = 1;
-                }
-                ir = 12;
                 break;
             case 7:
-                if (zf == 1){
-                    pc = 12;
-                    ir = 7;
-                }
-                else {
-                    ir = 14;
+                switch (fetch) {
+                    case 0:
+                        ir = 12;
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        if (zf == 1){
+                            pc = 12;
+                        }
+                        else {
+                            pc++;
+                        }
+                        fetch = -1;
+                        break;
                 }
                 break;
             case 8:
-                if (sf == 1){
-                    pc = 11;
-                    ir = 1;
-                } 
-                else {
-                    ir = 4;
+                switch (fetch) {
+                    case 0:
+                        ir = 14;
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        if (sf == 1){
+                            pc = 11;
+                        } 
+                        else {
+                            pc++;
+                        }
+                        fetch = -1;
+                        break;
                 }
                 break;
             case 9:
-                if (((eax > 0 && ebx > 0 || eax < 0 && ebx < 0) && eax*ebx < 0) ||
-                ((eax > 0 && ebx < 0 || eax < 0 && ebx > 0) && eax*ebx > 0)){
-                    of = 1;
-                    cf = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 4;
+                        break;
+                    case 1:
+                        if (((eax > 0 && ebx > 0 || eax < 0 && ebx < 0) && eax*ebx < 0) ||
+                        ((eax > 0 && ebx < 0 || eax < 0 && ebx > 0) && eax*ebx > 0)){
+                            of = 1;
+                            cf = 1;
+                        }
+                        else{
+                            of = 0;
+                            cf = 0;
+                        }
+                        eax = eax*ebx;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
                 }
-                else{
-                    of = 0;
-                    cf = 0;
-                }
-                eax = eax*ebx;
-                ir = 8;
                 break;
             case 10:
-                if (ecx - 1){
-                    pc = 8;
-                    ir = 4;
+                switch (fetch) {
+                    case 0:
+                        ir = 8;
+                        break;
+                    case 1:
+                        ecx--;
+                        break;
+                    case 2:
+                        if (ecx){
+                            pc = 9;
+                        }
+                        else {
+                            pc++;
+                        }
+                        fetch = -1;
+                        break;
                 }
-                else {
-                    ir = 11;
-                }
-                ecx--;
                 break;
             case 11:
-                pc = 12;
-                ir = 7;
+                switch (fetch) {
+                    case 0:
+                        ir = 11;
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        pc = 13;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 12:
-                eax = -1;
-                sf = 1;
-                zf = 0;
-                cf = 0;
-                ir = 7;
+                switch (fetch) {
+                    case 0:
+                        ir = 7;
+                        break;
+                    case 1:
+                        eax = -1;
+                        sf = 1;
+                        zf = 0;
+                        cf = 0;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 13:
-                ebx = memoria[0];
-                ir = 7;
+                switch (fetch) {
+                    case 0:
+                        ir = 7;
+                        break;
+                    case 1:
+                        ebx = memoria[0];
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 14:
-                ebp = memoria[1];
-                ir = 9;
+                switch (fetch) {
+                    case 0:
+                        ir = 7;
+                        break;
+                    case 1:
+                        ebp = memoria[1];
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 15:
-                final = 0;
+                switch (fetch) {
+                    case 0:
+                        ir = 9;
+                        break;
+                    case 1:
+                        final = 0;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
         }
-        pc++;
+        fetch++;
         if (eax >= 0){
             ceax = *" ";
         } else{
@@ -352,7 +630,7 @@ void interfaz3(int num){
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
     char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
-    int pc = 0, ir = 6, final = 1;
+    int pc = 0, ir = 0, final = 1, fetch = 0;
     char instrucciones[15][25] = {"empujar    EBP", "mover    EBP, ESP",
     "empujar    EBX", "mover    EAX, [EBP + 8]", "mover    EBX, 2",
     "restar    EDX, EDX", "dividir    EBX", "comparar    EDX, 0",
@@ -361,103 +639,252 @@ void interfaz3(int num){
     int memoria[3] = {0, 0, num};
     while (final){
         system("clear");
-        printf("Registro PC: %d\n", toBinary(pc + 1));
-        printf("Registro de Instrucciones: %d\n\n", toBinary(ir));
-        printf("Registro EAX: %d%c        \t\tBandera SF: %d\
-        \nRegistro EBX: %d%c        \t\tBandera ZF: %d\n", toBinary(eax), ceax, sf, toBinary(ebx), cebx, zf);
-        printf("Registro ECX: %d%c        \t\tBandera CF: %d\
-        \nRegistro EDX: %d%c        \t\tBandera OF: %d\n", toBinary(ecx), cecx, cf, toBinary(edx), cedx, of);
-        printf("Registro EBP: %d%c\nRegistro ESP: %d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
+        printf("Registro PC: %08d\n", toBinary(pc + 1));
+        printf("Registro de Instrucciones: %08d\n\n", toBinary(ir));
+        printf("Registro EAX: %08d%c        \t\tBandera SF: %d\
+        \nRegistro EBX: %08d%c        \t\tBandera ZF: %d\n", toBinary(eax), ceax, sf, toBinary(ebx), cebx, zf);
+        printf("Registro ECX: %08d%c        \t\tBandera CF: %d\
+        \nRegistro EDX: %08d%c        \t\tBandera OF: %d\n", toBinary(ecx), cecx, cf, toBinary(edx), cedx, of);
+        printf("Registro EBP: %08d%c\nRegistro ESP: %08d%c", toBinary(ebp), cebp, toBinary(esp), cesp);
         printf("\n\nInstruccion: %s\n\n", instrucciones[pc]);
         printf("\nMemoria: [");
         for (int i = 0; i < 3; i++) {
             if (i != 2){ 
-                printf(" %X,", memoria[i]);
+                printf(" %04X,", memoria[i]);
             }
             else{
-                printf(" %X", memoria[i]);
+                printf(" %04X", memoria[i]);
             }
         }
         printf("]\n\nPresione <enter> para continuar...");
         getchar();
         switch (pc){
             case 0:
-                memoria[1] = ebp;
-                ir = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 6;
+                        break;
+                    case 1:
+                        memoria[1] = ebp;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 1:
-                ebp = esp;
-                ir = 6;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        ebp = esp;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 2:
-                memoria[0] = ebx;
-                ir = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 6;
+                        break;
+                    case 1:
+                        memoria[0] = ebx;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 3:
-                eax = num;
-                ir = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        eax = num;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 4:
-                ebx = 2;
-                ir = 3;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        ebx = 2;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 5:
-                edx = edx - edx;
-                ir = 5;
-                zf = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 3;
+                        break;
+                    case 1:
+                        edx = edx - edx;
+                        zf = 1;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 6:
-                edx = eax%ebx;
-                eax = eax/ebx;
-                cf = 0;
-                of = 0;
-                zf = 0;
-                sf = 0;
-                ir = 10;
+                switch (fetch) {
+                    case 0:
+                        ir = 5;
+                        break;
+                    case 1:
+                        edx = eax%ebx;
+                        eax = eax/ebx;
+                        cf = 0;
+                        of = 0;
+                        zf = 0;
+                        sf = 0;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 7:
-                if (edx == 0){
-                    zf = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 10;
+                        break;
+                    case 1:
+                        if (edx == 0){
+                            zf = 1;
+                        }
+                        if (edx < 0){
+                            sf = 1;
+                        }
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
                 }
-                if (edx < 0){
-                    sf = 1;
-                }
-                ir = 12;
                 break;
             case 8:
-                if (zf == 1){
-                    pc = 10;
-                    ir = 1;
-                }
-                else {
-                    ir = 1;
+                switch (fetch) {
+                    case 0:
+                        ir = 12;
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        if (zf == 1){
+                            pc = 11;
+                        }
+                        else {
+                            pc++;
+                        }
+                        fetch = -1;
+                        break;
                 }
                 break;
             case 9:
-                eax = 0;
-                ir = 11;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        eax = 0;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 10:
-                pc = 11;
-                ir = 7;
+                switch (fetch) {
+                    case 0:
+                        ir = 11;
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        pc = 12;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 11:
-                eax = 1;
-                ir = 7;
+                switch (fetch) {
+                    case 0:
+                        ir = 1;
+                        break;
+                    case 1:
+                        eax = 1;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 12:
-                ebx = memoria[0];
-                ir = 7;
+                switch (fetch) {
+                    case 0:
+                        ir = 7;
+                        break;
+                    case 1:
+                        ebx = memoria[0];
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 13:
-                ebp = memoria[1];
-                ir = 9;
+                switch (fetch) {
+                    case 0:
+                        ir = 7;
+                        break;
+                    case 1:
+                        ebp = memoria[1];
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
             case 14:
-                final = 0;
+                switch (fetch) {
+                    case 0:
+                        ir = 9;
+                        break;
+                    case 1:
+                        final = 0;
+                        break;
+                    case 2:
+                        pc++;
+                        fetch = -1;
+                        break;
+                }
                 break;
         }
-        pc++;
+        fetch++;
         if (eax >= 0){
             ceax = *" ";
         } else{
