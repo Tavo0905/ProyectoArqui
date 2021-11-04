@@ -12,7 +12,6 @@ void interfaz1(int arreglo[10]) {
     //el arreglo, y simula su ejecucion
     // Inicio de variables para la simulacion
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
-    char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
     int pc = 0, ir = 0, final = 1, fetch = 0;
     char instrucciones[12][25] = {"empujar    EBP", "mover    EBP, ESP",
@@ -273,36 +272,6 @@ void interfaz1(int arreglo[10]) {
                 break;
         }
         fetch++;
-        if (eax >= 0){      // Imprime el complemento a dos de cada registro
-            ceax = *" ";
-        } else{
-            ceax = *"c";
-        }
-        if (ebx >= 0){
-            cebx = *" ";
-        } else{
-            cebx = *"c";
-        }
-        if (ecx >= 0){
-            cecx = *" ";
-        } else{
-            cecx = *"c";
-        }
-        if (edx >= 0){
-            cedx = *" ";
-        } else{
-            cedx = *"c";
-        }
-        if (ebp >= 0){
-            cebp = *" ";
-        } else{
-            cebp = *"c";
-        }
-        if (esp >= 0){
-            cesp = *" ";
-        } else{
-            cesp = *"c";
-        }
     }
 }
 
@@ -311,7 +280,6 @@ void interfaz2(int base, int exponente){
     //los parametros y simula la ejecucion
     // Inicio de variables para la simulacion
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
-    char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
     int pc = 0, ir = 0, final = 1, fetch = 0;
     char instrucciones[16][25] = {"empujar    EBP", "mover    EBP, ESP",
@@ -640,36 +608,6 @@ void interfaz2(int base, int exponente){
                 break;
         }
         fetch++;
-        if (eax >= 0){      // Imprime el complemento a dos de cada registro
-            ceax = *" ";
-        } else{
-            ceax = *"c";
-        }
-        if (ebx >= 0){
-            cebx = *" ";
-        } else{
-            cebx = *"c";
-        }
-        if (ecx >= 0){
-            cecx = *" ";
-        } else{
-            cecx = *"c";
-        }
-        if (edx >= 0){
-            cedx = *" ";
-        } else{
-            cedx = *"c";
-        }
-        if (ebp >= 0){
-            cebp = *" ";
-        } else{
-            cebp = *"c";
-        }
-        if (esp >= 0){
-            cesp = *" ";
-        } else{
-            cesp = *"c";
-        }
     }
 }
 
@@ -678,7 +616,6 @@ void interfaz3(int num){
     //numero por comprobar, y simula su ejecucion
     // Inicio de variables para la simulacion
     int eax = 0, ebx = 0, ecx = 0, edx = 0, ebp = 0, esp = 0;
-    char ceax = *" ", cebx = *" ", cecx = *" ", cedx = *" ", cebp = *" ", cesp = *" ";
     int sf = 0, zf = 0, cf = 0, of = 0;
     int pc = 0, ir = 0, final = 1, fetch = 0;
     char instrucciones[15][25] = {"empujar    EBP", "mover    EBP, ESP",
@@ -958,36 +895,6 @@ void interfaz3(int num){
                 break;
         }
         fetch++;
-        if (eax >= 0){      //  Valida el complemento a dos de cada registro
-            ceax = *" ";
-        } else{
-            ceax = *"c";
-        }
-        if (ebx >= 0){
-            cebx = *" ";
-        } else{
-            cebx = *"c";
-        }
-        if (ecx >= 0){
-            cecx = *" ";
-        } else{
-            cecx = *"c";
-        }
-        if (edx >= 0){
-            cedx = *" ";
-        } else{
-            cedx = *"c";
-        }
-        if (ebp >= 0){
-            cebp = *" ";
-        } else{
-            cebp = *"c";
-        }
-        if (esp >= 0){
-            cesp = *" ";
-        } else{
-            cesp = *"c";
-        }
     }
 }
 
